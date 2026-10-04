@@ -3,6 +3,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Link, useParams } from "@tanstack/react-router";
 import {
+  Car,
   Check,
   Copy,
   ExternalLink,
@@ -76,6 +77,13 @@ export const useLocationStore = create(
     { name: "poputi-location-demo" },
   ),
 );
+
+// Keep recipient tabs in sync when the demo passenger stops sharing.
+window.addEventListener("storage", (event) => {
+  if (event.key === "poputi-location-demo" || event.key === null) {
+    void useLocationStore.persist.rehydrate();
+  }
+});
 
 function useNow() {
   const [now, setNow] = useState(Date.now());
